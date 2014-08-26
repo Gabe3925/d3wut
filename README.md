@@ -1,4 +1,6 @@
 d3wut
 =====
+d3: bar-graph and scatter-plot
 
-d3 playground
+On Heroku:
+http://quiet-spire-2289.herokuapp.com/
