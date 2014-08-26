@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="./javascripts/d3.v3.js"></script>
+
+    </head>
+    <body>
+
+        <script type="text/javascript">
+
+//Create a dynamic random dataset
+var dataset = [];                        //Initialize empty array
+
+for (var i = 0; i < 20; i++) {           //Loop 20 times
+    var newNumber =  Math.round(Math.random() * 50);  //New random number (0-50)
+    dataset.push(newNumber);             //Add new number to array
+}
+
+//Or a fixed dataset if you like...
+// var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+// 16, 18, 23, 25 ];
+
+
+//Create a width and height to use for the SVG 'canvas?'
+var w = 800;
+var h = 300;
+var barPadding = 1;
+
+//Create SVG element, use the width and height from above
+var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+//Create the bars of the graph, attach them to data
+svg.selectAll("rect")
+   .data(dataset)
+   .enter()
+   .append("rect")
+   .attr("fill", function(d) {
+    return "rgb(0, 0, " + (d * 7) + ")";
+})
+   .attr("x", function(d, i) {
+        return i * (w / dataset.length);
+    })
+  .attr("y", function(d) {
+    return h - d * 4;  //Height minus data value (scaled up x 4)
+})
+   .attr("height", function(d) {
+    scaledHeight = d * 4 //height scaled up by 4
+    return scaledHeight
+})
+   .attr("width", w / dataset.length - barPadding * 2);
+
+//Create labels (text) for the graph
+svg.selectAll("text")
+   .data(dataset)
+   .enter()
+   .append("text")
+   .text(function(d) {
+        return d;
+   })
+   .attr("x", function(d, i) {
+        return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+    })
+   .attr("y", function(d) {
+        return h - (d * 4) + 14;
+   })
+   .attr("font-family", "sans-serif")
+   .attr("font-size", "11px")
+   .attr("fill", "white")
+   .attr("text-anchor", "middle");
+
+d3.selectAll("rect")
+  .transition()
+  .duration(-1)
+  .attr("height", "0%");
+
+d3.selectAll("rect")//Bars transition into being...
+  .transition()
+  .delay(function(d, i) {
+    return (i * 100) + 400;
+  })
+  .duration(2000)
+  .attr("height", "100%")
+  .each("end", function() {
+
+    //evaporate bars when finished
+      d3.select(this)
+      .transition()
+      .delay(function(d, i) {
+        return i * 50;
+      })
+      .duration(9000)
+      .attr("height", "0%")
+      .attr("fill", function(d) {
+    return "rgb(230, 0, " + (d / 2) + ")";
+})
+
+
+
+
+  });
+
+// d3.selectAll("circle")
+//   .transition()
+//   .delay(function(d, i) {
+//     return i * 100;
+//   })
+//   .duration(3000)
+//   .attr("cy", "50%")
+
+</script>
+
+<a href="./scatter">Scatter</a>
+</body>
+</html>
